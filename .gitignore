@@ -1,0 +1,6 @@
+shots/
+__pycache__/
+*.tmp
+art/raw/*.log
+art/raw/%SystemDrive%/
+art/stickers/

@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>水豚温泉</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #3d4a5c;
+    --blue: #7fb2dc;
+    --blue2: #cfe3f3;
+    --cream: #fffaf1;
+    --display: "ZCOOL KuaiLe", "Microsoft YaHei UI", "PingFang SC", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    font: 15px/1.5 "Microsoft YaHei UI", "PingFang SC", sans-serif; color: var(--ink);
+    background:
+      radial-gradient(ellipse at 50% 35%, rgba(255,255,255,.55), transparent 60%),
+      repeating-conic-gradient(#e7f0f7 0 25%, #f4f8fb 0 50%) 0 0 / 44px 44px;
+    overflow: hidden; display: flex; align-items: center; justify-content: center;
+  }
+  #wrap { position: relative; display: flex; flex-direction: column; align-items: center; }
+
+  /* 包装上的挂孔和标签 */
+  .hanger { width: 64px; height: 20px; border-radius: 12px; background: #dfe8ef; box-shadow: inset 0 2px 4px rgba(0,0,0,.18); margin-bottom: -8px; position: relative; z-index: 3; }
+  #card {
+    position: relative; background: #fff; border-radius: 26px; padding: 14px;
+    box-shadow: 0 30px 60px rgba(40,70,100,.22), 0 6px 14px rgba(40,70,100,.12);
+  }
+  #scene { position: relative; border-radius: 16px; overflow: hidden; background: #eef1f4; }
+  #scene > img.bg { display: block; width: 100%; height: 100%; }
+
+  .label {
+    position: absolute; left: 34px; top: 30px; z-index: 900;
+    background: var(--cream); border-radius: 18px; padding: 12px 20px 12px 18px;
+    box-shadow: 0 0 0 5px #fff, 0 0 0 6.5px #d8d0c4, 0 8px 16px rgba(0,0,0,.12);
+    animation: stick .6s cubic-bezier(.2,1.5,.4,1) .15s both; transform-origin: 30% 50%;
+  }
+  .label h1 { margin: 0; font: 34px/1.05 var(--display); letter-spacing: 2px; color: #35506e; }
+  .label h1 b { color: #e0795e; font-weight: normal; }
+  .label p { margin: 6px 0 0; font: 15px var(--display); color: #6a86a3; letter-spacing: 1px; }
+  .label .ticks { margin-top: 8px; display: flex; gap: 12px; font: 14px var(--display); color: #4f6a86; }
+  .label .ticks span::before { content: "☑ "; color: #e0795e; }
+
+  /* 贴纸：外层负责位置和"贴上去"，内层负责闲时的浮动 */
+  .stk { position: absolute; transform-origin: 50% 90%; animation: stick .55s cubic-bezier(.25,1.45,.45,1) var(--d, 0s) both; filter: drop-shadow(0 2px 1.5px rgba(40,60,80,.22)) drop-shadow(0 5px 6px rgba(40,60,80,.12)); }
+  .stk .in { position: relative; width: 100%; height: 100%; animation: var(--idle, none); }
+  .stk img { display: block; width: 100%; height: 100%; }
+  /* PET 贴纸的反光：一道亮光按贴纸形状扫过去 */
+  .stk .in::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(115deg, transparent 38%, rgba(255,255,255,.75) 47%, rgba(255,255,255,.2) 52%, transparent 60%) no-repeat;
+    background-size: 300% 100%; background-position: 150% 0;
+    -webkit-mask: var(--m) center / 100% 100% no-repeat; mask: var(--m) center / 100% 100% no-repeat;
+    mix-blend-mode: screen; opacity: .9;
+    animation: sheen 9s ease-in-out calc(var(--d, 0s) + var(--sd, 2s)) infinite;
+  }
+  @keyframes stick {
+    0% { opacity: 0; transform: translateY(-46px) rotate(-7deg) scale(1.16); filter: drop-shadow(0 26px 16px rgba(40,60,80,.25)); }
+    55% { opacity: 1; transform: translateY(3px) rotate(1deg) scale(.97); }
+    78% { transform: translateY(-1px) rotate(-.3deg) scale(1.01); }
+    100% { opacity: 1; transform: none; }
+  }
+  @keyframes sheen { 0%, 78% { background-position: 150% 0; } 92%, 100% { background-position: -60% 0; } }
+  @keyframes bob { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-1.8%) rotate(.8deg); } }
+  @keyframes bob2 { 0%, 100% { transform: translateY(-1%) rotate(-.6deg); } 50% { transform: translateY(1.2%) rotate(.6deg); } }
+  @keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.012, .988); } }
+  @keyframes sway { 0%, 100% { transform: rotate(-1.4deg); } 50% { transform: rotate(1.4deg); } }
+
+  /* 热气、水光、雪、灯光 */
+  .fx { position: absolute; pointer-events: none; }
+  .steam { width: 8.5%; aspect-ratio: 1.2; border-radius: 50%;
+    background: radial-gradient(ellipse at 50% 55%, rgba(255,255,255,1) 0%, rgba(255,255,255,.85) 30%, rgba(236,246,252,.35) 55%, rgba(255,255,255,0) 72%);
+    filter: blur(5px) drop-shadow(0 0 3px rgba(140,175,200,.35)); opacity: 0; animation: steam var(--t, 6s) ease-out var(--sd, 0s) infinite; }
+  @keyframes steam { 0% { opacity: 0; transform: translate(0, 0) scale(.5); } 25% { opacity: .55; } 60% { opacity: .38; } 100% { opacity: 0; transform: translate(var(--dx, 10px), -190%) scale(1.7); } }
+  .glint { width: 3.6%; height: .9%; border-radius: 50%; background: rgba(255,255,255,.9); filter: blur(.6px); opacity: 0; animation: glint 3.2s ease-in-out var(--sd, 0s) infinite; }
+  @keyframes glint { 0%, 100% { opacity: 0; transform: scaleX(.4); } 40% { opacity: .9; transform: scaleX(1); } 70% { opacity: 0; transform: scaleX(1.4); } }
+  #snow { position: absolute; overflow: hidden; }
+  #snow i { position: absolute; top: -4%; width: 4px; height: 4px; border-radius: 50%; background: #fff; opacity: .9; animation: snow var(--t, 7s) linear var(--sd, 0s) infinite; }
+  @keyframes snow { to { transform: translate(var(--dx, -20px), var(--fall, 300px)); } }
+  .glow { border-radius: 50%; background: radial-gradient(circle, rgba(255,214,140,.55), rgba(255,214,140,0) 65%); animation: glow 3.5s ease-in-out infinite; }
+  @keyframes glow { 0%, 100% { opacity: .65; transform: scale(1); } 50% { opacity: 1; transform: scale(1.1); } }
+
+  /* 窗户斜照进来的光 */
+  #sunbeam { position: absolute; inset: 0; pointer-events: none; z-index: 5; mix-blend-mode: screen; opacity: 0;
+    background: linear-gradient(200deg, rgba(235,246,255,.75) 0%, rgba(235,246,255,.25) 45%, rgba(235,246,255,0) 80%);
+    clip-path: polygon(62.4% 35.4%, 83.9% 46.4%, 70.3% 83%, 42% 64.5%);
+    filter: blur(6px); animation: beam 7s ease-in-out 4.5s infinite; }
+  @keyframes beam { 0%, 100% { opacity: .45; } 50% { opacity: .8; } }
+  #replay {
+    position: absolute; right: 22px; bottom: -40px; border: 0; background: none; font: 15px var(--display); color: #6a86a3; cursor: pointer; opacity: .8;
+  }
+  #replay:hover { opacity: 1; text-decoration: underline; }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div class="hanger"></div>
+  <div id="card">
+    <div id="scene">
+      <img class="bg" src="assets/backdrop.jpg" alt="温泉场景卡">
+      <div id="snow"></div>
+      <div id="sunbeam"></div>
+    </div>
+    <div class="label">
+      <h1>3D造景贴纸 · <b>水豚温泉</b></h1>
+      <p>雪山脚下的小小汤屋</p>
+      <div class="ticks"><span>可爱小动物</span><span>温泉+更衣室+饮品角</span></div>
+    </div>
+  </div>
+  <button id="replay">重新贴一遍</button>
+</div>
+<script src="assets/stickers.js"></script>
+<script src="js/scene.js"></script>
+</body>
+</html>

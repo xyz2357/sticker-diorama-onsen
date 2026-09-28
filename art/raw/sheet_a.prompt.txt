@@ -1,0 +1,6 @@
+Use the image generation tool directly to produce ONE image. DO NOT write a Python/PIL renderer script — generate via the AI image model. Recreate the attached reference image as exactly as possible: the same 8 cute capybara illustrations in the same positions and layout at 1536x1024, same drawing style, same colors, same outlines. The ONLY change: replace the whole dark background with a perfectly flat solid pure magenta #FF00FF background. Remove every glow, halo, light bloom, vignette and shadow around the objects — the magenta must touch each object's outline directly. No text, no labels. Save the generated image as sheet_a.png in the current directory.
+
+# --- meta ---
+date: 2026-09-28
+model: codex exec built-in image tool (Codex-selected; GPT Image 2.5 generation as of 2026-09)
+notes: 带 -i sheet_a_darkbg.png 原样重画，只换成品红背景。处理：tools/make_stickers.py cut 抠底，bake 按 art/layout.json 尺寸加白色模切边
