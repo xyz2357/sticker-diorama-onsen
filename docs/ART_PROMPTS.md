@@ -45,7 +45,7 @@ codex exec --approve-for-me -C art/raw --skip-git-repo-check --json "<提示词>
 
 ## 摆放
 
-在 `js/scene.js` 的 `LAYOUT` 里改：
+成品参考的摆放在 `js/diy.js` 的 `LAYOUT` 里改：
 - 地上的东西用地板坐标 `at: [u, v]`：u 沿左后墙，v 沿右后墙，0 是后墙角；
 - 墙上的东西用场景卡像素 `xy`；
 - 放在木地台上的加 `deck: 1`。
